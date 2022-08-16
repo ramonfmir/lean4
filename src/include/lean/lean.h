@@ -1853,6 +1853,7 @@ static inline double lean_float_sub(double a, double b) { return a - b; }
 static inline double lean_float_mul(double a, double b) { return a * b; }
 static inline double lean_float_div(double a, double b) { return a / b; }
 static inline double lean_float_negate(double a) { return -a; }
+static inline double lean_float_abs(double a) { return (a < 0) ? -a : a; }
 static inline uint8_t lean_float_beq(double a, double b) { return a == b; }
 static inline uint8_t lean_float_decLe(double a, double b) { return a <= b; }
 static inline uint8_t lean_float_decLt(double a, double b) { return a < b; }

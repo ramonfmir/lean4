@@ -36,6 +36,7 @@ instance : Inhabited Float := ⟨{ val := floatSpec.val }⟩
 @[extern "lean_float_mul"] opaque Float.mul : Float → Float → Float
 @[extern "lean_float_div"] opaque Float.div : Float → Float → Float
 @[extern "lean_float_negate"] opaque Float.neg : Float → Float
+@[extern "lean_float_abs"] opaque Float.abs : Float → Float
 
 set_option bootstrap.genMatcherCode false
 def Float.lt : Float → Float → Prop := fun a b =>
