@@ -1692,6 +1692,8 @@ LEAN_SHARED uint8_t lean_float_isnan(double a);
 LEAN_SHARED uint8_t lean_float_isfinite(double a);
 LEAN_SHARED uint8_t lean_float_isinf(double a);
 LEAN_SHARED lean_obj_res lean_float_frexp(double a);
+LEAN_SHARED uint64_t lean_float_to_bits(double a);
+LEAN_SHARED lean_obj_res lean_float_mantissa_exponent(double a);
 
 /* Boxing primitives */
 
