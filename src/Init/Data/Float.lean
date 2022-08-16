@@ -81,6 +81,8 @@ instance floatDecLe (a b : Float) : Decidable (a ≤ b) := Float.decLe a b
 @[extern "lean_float_isfinite"] opaque Float.isFinite : Float → Bool
 @[extern "lean_float_isinf"] opaque Float.isInf : Float → Bool
 @[extern "lean_float_frexp"] opaque Float.frExp : Float → Float × Int
+@[extern "lean_float_to_bits"] opaque Float.toBits : Float → UInt64
+@[extern "lean_float_mantissa_exponent"] opaque Float.me : Float → Int × Int
 
 instance : ToString Float where
   toString := Float.toString
