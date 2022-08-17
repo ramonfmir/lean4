@@ -1525,18 +1525,19 @@ extern "C" LEAN_EXPORT obj_res lean_float_mantissa_exponent(double a) {
 
         uint64_t b = lean_float_to_bits(a);
 
-        uint64_t s_pre = b << (64 - SIGN_BITS);
-        uint64_t e_pre = (b >> SIGN_BITS) << (64 - EXPONENT_BITS);
-        uint64_t m_pre = (b >> (SIGN_BITS + EXPONENT_BITS)) << (64 - MANTISSA_BITS);
+        uint64_t s_pre = b >> (64 - SIGN_BITS);
+        uint64_t e_pre = (b << SIGN_BITS) >> (64 - EXPONENT_BITS);
+        uint64_t m_pre = (b << (SIGN_BITS + EXPONENT_BITS)) >> (64 - MANTISSA_BITS);
+        m_pre += ((uint64_t) 1) << MANTISSA_BITS;
 
-        m = ((s_pre == 1) ? -1 : 1) * (int) (m_pre + (1 << MANTISSA_BITS));
-        e = ((int) e_pre) - EXPONENT_BIAS - MANTISSA_BITS;
+        int64_t m = ((s_pre == 1) ? -1 : 1) * (int64_t) (m_pre);
+        int64_t e = ((int64_t) e_pre) - EXPONENT_BIAS - MANTISSA_BITS;
     } else {
         m = 0;
         e = 0;
     }
-    lean_ctor_set(r, 0, lean_int_to_int(m));
-    lean_ctor_set(r, 1, lean_int_to_int(e));
+    lean_ctor_set(r, 0, lean_int64_to_int(m));
+    lean_ctor_set(r, 1, lean_int64_to_int(e));
     return r;
 }
 
