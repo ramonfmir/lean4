@@ -1516,7 +1516,8 @@ extern "C" LEAN_EXPORT uint64_t lean_float_to_bits(double a) {
 
 extern "C" LEAN_EXPORT obj_res lean_float_mantissa_exponent(double a) {
     object* r = lean_alloc_ctor(0, 2, 0);
-    int m, e;
+    int64_t m = 0;
+    int64_t e = 0;
     if (isfinite(a)) {
         #define SIGN_SIZE 1
         #define EXPONENT_SIZE 11
@@ -1526,19 +1527,17 @@ extern "C" LEAN_EXPORT obj_res lean_float_mantissa_exponent(double a) {
         uint64_t b = lean_float_to_bits(a);
 
         uint64_t s_pre = b >> (64 - SIGN_SIZE);
-        uint64_t e_pre = b << SIGN_SIZE >> (64 - EXPONENT_SIZE);
+        uint64_t e_pre = (b << SIGN_SIZE) >> (64 - EXPONENT_SIZE);
         uint64_t m_pre = (b << (SIGN_SIZE + EXPONENT_SIZE)) >> (64 - MANTISSA_SIZE);
         m_pre += ((uint64_t) 1) << MANTISSA_SIZE;
-
-        int64_t m = ((s_pre == 1) ? -1 : 1) * (int64_t) (m_pre);
-        int64_t e = ((int64_t) e_pre) - EXPONENT_BIAS - MANTISSA_SIZE;
-        while (m % 2 == 0) {
-            m /= 2;
-            e += 1;
+        if (e_pre != 0) {
+            m = ((s_pre == 1) ? -1 : 1) * (int64_t) (m_pre);
+            e = ((int64_t) e_pre) - EXPONENT_BIAS - MANTISSA_SIZE;
+            while (m % 2 == 0 && m != 0) {
+                m /= 2;
+                e += 1;
+            }
         }
-    } else {
-        m = 0;
-        e = 0;
     }
     lean_ctor_set(r, 0, lean_int64_to_int(m));
     lean_ctor_set(r, 1, lean_int64_to_int(e));
