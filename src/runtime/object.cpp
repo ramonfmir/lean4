@@ -1507,7 +1507,11 @@ extern "C" LEAN_EXPORT obj_res lean_float_frexp(double a) {
 }
 
 extern "C" LEAN_EXPORT uint64_t lean_float_to_bits(double a) {
-    union { double f; uint64_t u; } fu = { .f = a }; return fu.u;
+    union {
+        double f;
+        uint64_t u;
+    } fu = { .f = a };
+    return fu.u;
 }
 
 extern "C" LEAN_EXPORT obj_res lean_float_mantissa_exponent(double a) {
@@ -1518,6 +1522,7 @@ extern "C" LEAN_EXPORT obj_res lean_float_mantissa_exponent(double a) {
         #define EXPONENT_BITS 11
         #define MANTISSA_BITS 52
         #define EXPONENT_BIAS 1023
+
         uint64_t b = lean_float_to_bits(a);
 
         uint64_t s_pre = b << (64 - SIGN_BITS);
